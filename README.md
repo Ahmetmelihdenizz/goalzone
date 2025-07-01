@@ -1,24 +1,50 @@
 # GoalZone
 
-Modern ve eğlenceli paddle futbol oyunu.  
-Flutter + Flame ile geliştirildi.
+🚀 Minimalist paddle futbol oyunu — **Flutter & Flame** ile geliştirildi!  
+Kolay, Orta ve Zor modlar ile reflekslerini test et, botlara karşı skorunu artır!
 
-## Özellikler
-- Tek oyuncu ve botlara karşı oynanabilen paddle futbol oyunu
-- Kolay, Orta ve Zor modlar
-- Zor seviyede çift top ile ekstra zorluk
-- Akıcı animasyonlar, responsive tasarım, sade arayüz
-- Skor takibi, temiz oyun mantığı
+---
 
-## İndir ve Oyna
-[Download APK](release/app-release.apk)
+## 🏆 Özellikler
 
-## Ekran Görüntüleri
-![Ekran görüntüsü](screenshots/mainmenu.png)
-![Oyun ekranı](screenshots/ingame.png)
+- ⚡ **Akıcı ve hızlı oyun deneyimi**
+- 🎮 **Botlara karşı paddle ile futbol keyfi**
+- 🔥 **3 farklı zorluk seviyesi** (Zor modda çift top!)
+- 🟢 **Oyuncu vs Bot skorları**
+- 🌈 **Modern, sade arayüz**
+- 📱 **Android APK dosyası dahil**
 
-## Katkıda Bulunmak
-Pull request ve issue açarak katkıda bulunabilirsiniz!
+---
 
-## Lisans
-MIT License
+## 📲 Uygulamayı İndir
+
+- [release/app-release.apk](release/app-release.apk)  
+  Android cihazına indir, hemen oyna!
+
+---
+
+## 🖼️ Ekran Görüntüleri
+
+Ana Menü:  
+![Ana Menü](screenshots/ana_menu.png)
+
+Oyun Ekranı:  
+![Oyun Ekranı](screenshots/oyun.png)
+
+---
+
+## 🚦 Nasıl Oynanır?
+
+- Paddle’ını sürükle, topu savun ve diğer kalelere gol at!
+- “Zor” modda iki top var — ekstra heyecan!
+- 5 gol atan kazanır.
+
+---
+
+## 🔧 Kurulum (Geliştiriciler için)
+
+```sh
+git clone https://github.com/Ahmetmelihdenizz/goalzone.git
+cd goalzone
+flutter pub get
+flutter run
