@@ -1,5 +1,3 @@
-// lib/models/difficulty.dart
-
 enum Difficulty { easy, medium, hard }
 
 extension DifficultyProps on Difficulty {

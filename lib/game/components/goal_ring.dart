@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flame/components.dart';
 
-/// Köşe ring görseli
 class GoalRing extends CircleComponent {
   GoalRing({
     required Vector2 position,

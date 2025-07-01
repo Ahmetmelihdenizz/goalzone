@@ -52,9 +52,6 @@ class MainMenu extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────
-// Difficulty butonu
-// ─────────────────────────────
 class _DifficultyButton extends StatelessWidget {
   const _DifficultyButton(this.level, this.onTap, {Key? key}) : super(key: key);
 

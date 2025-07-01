@@ -33,7 +33,7 @@ class GoalSensor extends PositionComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     if (!_triggered && other is Ball) {
       _triggered = true;
-      gameRef.onGoal(side, other); // Golü atan topu bildir!
+      gameRef.onGoal(side, other);
     }
     super.onCollision(points, other);
   }

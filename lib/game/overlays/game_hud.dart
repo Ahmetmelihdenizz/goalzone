@@ -1,5 +1,3 @@
-// lib/game/overlays/game_hud.dart
-
 import 'package:flutter/material.dart';
 import '../goal_zone_game.dart';
 

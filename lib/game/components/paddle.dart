@@ -75,7 +75,7 @@ class Paddle extends PositionComponent
   void update(double dt) {
     super.update(dt);
     if (isPlayer || gameRef.balls.isEmpty) return;
-    // Takip edilen topu seç: ilk top veya en yakını (geliştirilebilir)
+
     final followedBall = gameRef.balls.first;
     final target = side.isHorizontal ? followedBall.x : followedBall.y;
     final current = side.isHorizontal ? x : y;

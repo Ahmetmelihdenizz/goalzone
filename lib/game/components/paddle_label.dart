@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../goal_zone_game.dart';
-import '../side_extensions.dart'; // isHorizontal!
+import '../side_extensions.dart';
 import 'goal_area.dart';
 
 String _sideName(Side side) {

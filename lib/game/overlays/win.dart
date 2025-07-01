@@ -1,5 +1,3 @@
-// lib/game/overlays/win.dart
-
 import 'package:flutter/material.dart';
 import '../goal_zone_game.dart';
 

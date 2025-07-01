@@ -1,9 +1,7 @@
-// lib/game/components/goal_area.dart
-
 import 'dart:ui' as ui;
 import 'package:flame/components.dart';
 import '../goal_zone_game.dart';
-import '../side_extensions.dart'; // isHorizontal extension!
+import '../side_extensions.dart';
 import '../../services/theme.dart';
 
 class GoalArea extends PositionComponent with HasGameRef<GoalZoneGame> {
