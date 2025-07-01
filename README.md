@@ -1,16 +1,24 @@
-# goalzone
+# GoalZone
 
-A new Flutter project.
+Modern ve eğlenceli paddle futbol oyunu.  
+Flutter + Flame ile geliştirildi.
 
-## Getting Started
+## Özellikler
+- Tek oyuncu ve botlara karşı oynanabilen paddle futbol oyunu
+- Kolay, Orta ve Zor modlar
+- Zor seviyede çift top ile ekstra zorluk
+- Akıcı animasyonlar, responsive tasarım, sade arayüz
+- Skor takibi, temiz oyun mantığı
 
-This project is a starting point for a Flutter application.
+## İndir ve Oyna
+[Download APK](release/app-release.apk)
 
-A few resources to get you started if this is your first Flutter project:
+## Ekran Görüntüleri
+![Ekran görüntüsü](screenshots/mainmenu.png)
+![Oyun ekranı](screenshots/ingame.png)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Katkıda Bulunmak
+Pull request ve issue açarak katkıda bulunabilirsiniz!
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Lisans
+MIT License
