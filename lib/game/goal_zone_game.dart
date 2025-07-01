@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'dart:ui' as ui;
-import 'package:flutter/foundation.dart';
+
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:flame/collisions.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import '../models/difficulty.dart';
 import '../services/theme.dart';
 import 'components/ball.dart';
@@ -12,13 +15,13 @@ import 'components/paddle.dart';
 import 'components/goal_area.dart';
 import 'components/goal_sensor.dart';
 import 'components/particle_effects.dart';
-import 'package:flutter/material.dart';
 
 enum Side { top, right, bottom, left }
 
 class GoalZoneGame extends FlameGame with HasCollisionDetection {
-  Difficulty difficulty;
   GoalZoneGame(this.difficulty);
+
+  Difficulty difficulty;
 
   static const double wallThickness = 16.0;
   static final ui.Paint wallPaint = ui.Paint()..color = AppColors.wall;
@@ -26,8 +29,9 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
   late Side playerSide;
   int playerScore = 0;
   int botScore = 0;
-  List<Ball> balls = [];
+  final List<Ball> balls = [];
 
+  /// İç dikdörtgen (duvarların içi)
   ui.Rect get innerRect => ui.Rect.fromLTWH(
     wallThickness,
     wallThickness,
@@ -38,46 +42,73 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    // FPS sayaçları sadece debug’da
     if (kDebugMode) {
       add(
         FpsTextComponent(
           position: Vector2(10, 10),
           anchor: Anchor.topLeft,
           textRenderer: TextPaint(
-            style: TextStyle(color: Colors.white, fontSize: 12),
+            style: const TextStyle(color: Colors.white, fontSize: 12),
           ),
         ),
       );
     }
+
     _addWalls();
 
+    // Oyuncu hangi kenarda?
     playerSide = Side.values[Random().nextInt(Side.values.length)];
 
+    // Kale bölgeleri + paddle’lar
     for (final side in Side.values) {
       add(GoalArea(side));
       add(Paddle(side: side, isPlayer: side == playerSide));
     }
+
     _spawnGoalSensors();
     _spawnBalls();
     overlays.add('MainMenu');
   }
 
+  /* ------------------------------------------------------------------ */
+  /* --------------------------  DUVARLAR  ---------------------------- */
+  /* ------------------------------------------------------------------ */
   void _addWalls() {
     final w = size.x, h = size.y, t = wallThickness;
-    final start = (w - GoalArea.areaLength) / 2;
-    final end = start + GoalArea.areaLength;
+
+    // Kale boşluklarının başlangıç / bitiş koordinatları
+    final gapHStart = (w - GoalArea.areaLength) / 2;
+    final gapHEnd = gapHStart + GoalArea.areaLength;
+    final gapVStart = (h - GoalArea.areaLength) / 2;
+    final gapVEnd = gapVStart + GoalArea.areaLength;
+
     addAll([
-      _Wall(ui.Rect.fromLTWH(0, 0, start, t)),
-      _Wall(ui.Rect.fromLTWH(end, 0, w - end, t)),
-      _Wall(ui.Rect.fromLTWH(0, h - t, start, t)),
-      _Wall(ui.Rect.fromLTWH(end, h - t, w - end, t)),
-      _Wall(ui.Rect.fromLTWH(0, 0, t, h)),
-      _Wall(ui.Rect.fromLTWH(w - t, 0, t, h)),
+      // ÜST duvar (iki parça)
+      _Wall(ui.Rect.fromLTWH(0, 0, gapHStart, t)),
+      _Wall(ui.Rect.fromLTWH(gapHEnd, 0, w - gapHEnd, t)),
+
+      // ALT duvar (iki parça)
+      _Wall(ui.Rect.fromLTWH(0, h - t, gapHStart, t)),
+      _Wall(ui.Rect.fromLTWH(gapHEnd, h - t, w - gapHEnd, t)),
+
+      // SOL duvar (iki parça)
+      _Wall(ui.Rect.fromLTWH(0, 0, t, gapVStart)),
+      _Wall(ui.Rect.fromLTWH(0, gapVEnd, t, h - gapVEnd)),
+
+      // SAĞ duvar (iki parça)
+      _Wall(ui.Rect.fromLTWH(w - t, 0, t, gapVStart)),
+      _Wall(ui.Rect.fromLTWH(w - t, gapVEnd, t, h - gapVEnd)),
     ]);
   }
 
+  /* ------------------------------------------------------------------ */
+  /* ----------------------  GOL SENSÖRLERİ  --------------------------- */
+  /* ------------------------------------------------------------------ */
   void _spawnGoalSensors() {
     final w = size.x, h = size.y, t = wallThickness;
+
     addAll(
       Side.values.map((side) {
         final pos =
@@ -99,12 +130,17 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
     );
   }
 
+  /* ------------------------------------------------------------------ */
+  /* ---------------------------  TOPLAR  ------------------------------ */
+  /* ------------------------------------------------------------------ */
   void _spawnBalls() {
-    // Önce eski topları sil
+    // Eski topları temizle
     children.whereType<Ball>().forEach((b) => b.removeFromParent());
     balls.clear();
-    int ballCount = (difficulty == Difficulty.hard) ? 2 : 1;
-    for (int i = 0; i < ballCount; i++) {
+
+    final ballCount = difficulty == Difficulty.hard ? 2 : 1;
+
+    for (var i = 0; i < ballCount; i++) {
       final ball = Ball(initialSpeed: difficulty.ballSpeed);
       balls.add(ball);
       add(ball);
@@ -119,6 +155,9 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
     children.whereType<TimerComponent>().forEach((t) => t.removeFromParent());
   }
 
+  /* ------------------------------------------------------------------ */
+  /* ----------------------------  GOL  ------------------------------- */
+  /* ------------------------------------------------------------------ */
   void onGoal(Side goalSide, Ball scoredBall) {
     add(BigExplosion(scoredBall.position.clone()));
     scoredBall.removeFromParent();
@@ -129,10 +168,12 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
     } else {
       botScore++;
     }
+
     overlays
       ..remove('GameHud')
       ..add('GameHud');
 
+    // Kazanan 5 gol
     if (playerScore >= 5) {
       _cleanUpGame();
       pauseEngine();
@@ -142,9 +183,9 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
       pauseEngine();
       overlays.add('Win');
     } else {
+      // Yeni top ekle
       children.whereType<GoalSensor>().forEach((s) => s.reset());
-      // Her zaman toplam ballCount kadar top olsun:
-      int targetCount = (difficulty == Difficulty.hard) ? 2 : 1;
+      final targetCount = difficulty == Difficulty.hard ? 2 : 1;
       while (balls.length < targetCount) {
         final newBall = Ball(initialSpeed: difficulty.ballSpeed);
         balls.add(newBall);
@@ -153,13 +194,16 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
     }
   }
 
+  /* ------------------------------------------------------------------ */
+  /* -------------------------  RESET GAME  --------------------------- */
+  /* ------------------------------------------------------------------ */
   void resetGame({Difficulty? newDifficulty}) {
-    if (newDifficulty != null) {
-      difficulty = newDifficulty;
-    }
+    if (newDifficulty != null) difficulty = newDifficulty;
+
     playerScore = 0;
     botScore = 0;
     children.whereType<GoalSensor>().forEach((s) => s.reset());
+
     _cleanUpGame();
     _spawnBalls();
 
@@ -168,10 +212,14 @@ class GoalZoneGame extends FlameGame with HasCollisionDetection {
       ..remove('Win')
       ..remove('GameHud')
       ..add('MainMenu');
+
     resumeEngine();
   }
 }
 
+/* -------------------------------------------------------------------- */
+/* ----------------------------  WALL  -------------------------------- */
+/* -------------------------------------------------------------------- */
 class _Wall extends PositionComponent with CollisionCallbacks {
   _Wall(ui.Rect rect)
     : super(
